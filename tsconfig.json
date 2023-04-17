@@ -1,0 +1,25 @@
+{
+  "compilerOptions": {
+    // "target": "ESNext", // Cấu hính sử dụng phiên bản JS mới nhật
+    "target": "ES2015", // Tương đương ES6
+    "useDefineForClassFields": true,
+    "lib": ["DOM", "DOM.Iterable", "ESNext"],
+    "allowJs": false,
+    "skipLibCheck": true,
+    "esModuleInterop": false,
+    "allowSyntheticDefaultImports": true,
+    "strict": true,
+    "forceConsistentCasingInFileNames": true,
+    "module": "ESNext", // Kiểu code khi build ra
+    "moduleResolution": "Node",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "noEmit": true,
+    "jsx": "react-jsx",
+    "baseUrl": "."
+  },
+  "include": ["src"],
+  "references": [{
+    "path": "./tsconfig.node.json"
+  }]
+}
