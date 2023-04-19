@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
-import { rules } from 'src/utils/rules'
+import { getRules } from 'src/utils/rules'
 
 interface StateFormType {
   email: string
@@ -12,20 +12,29 @@ function Register() {
   const {
     register,
     handleSubmit,
-    formState: { errors }
+    formState: { errors },
+    watch,
+    getValues
   } = useForm<StateFormType>()
+
+  const rules = getRules(getValues)
 
   const onSubmit = (data: any, e: any) => {
     console.log('data', data)
   }
 
-  console.log('errors', errors)
+  const onError = (errors: any, e: any) => {
+    console.log('')
+  }
+
+  // const formVal = watch('email')
+  // console.log('formVal', formVal)
   return (
     <div className='bg-orange'>
       <div className='mx-auto max-w-7xl px-4'>
         <div className='grid grid-cols-1 py-12 lg:grid-cols-5 lg:py-32 lg:pr-10'>
           <div className='lg:col-span-2 lg:col-start-4'>
-            <form className='rounded bg-white p-10 shadow-sm' onSubmit={handleSubmit(onSubmit)} noValidate>
+            <form className='rounded bg-white p-10 shadow-sm' onSubmit={handleSubmit(onSubmit, onError)} noValidate>
               <div className='text-2xl'>Đăng ký</div>
               <div className='mt-8'>
                 <input
