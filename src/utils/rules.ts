@@ -1,8 +1,8 @@
-import type { RegisterOptions } from 'react-hook-form'
+import type { RegisterOptions, UseFormGetValues } from 'react-hook-form'
 
 type RulesType = { [key in 'email' | 'password' | 'confirm_password']?: RegisterOptions }
 
-export const rules: RulesType = {
+export const getRules = (getValues?: UseFormGetValues<any>): RulesType => ({
   email: {
     required: {
       value: true,
@@ -47,6 +47,10 @@ export const rules: RulesType = {
     maxLength: {
       value: 160,
       message: 'Độ dài từ 6 - 160 ký tự'
-    }
+    },
+    validate:
+      typeof getValues === 'function'
+        ? (value) => value === getValues('password') || 'Mật khẩu và mật khẩu nhập lại không trùng nhau'
+        : undefined
   }
-}
+})
