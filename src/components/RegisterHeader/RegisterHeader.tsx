@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 function RegisterHeader() {
   return (
     <header className='py-5'>
-      <div className='mx-auto max-w-7xl px-4'>
+      <div className='container'>
         {/* item-end: Căn chỉnh các item vào cuối của vùng chứa */}
         <nav className='flex items-end'>
           <Link to={'/'}>
