@@ -1,12 +1,23 @@
 import { Link } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
+import { Input } from 'src/components/Input'
+import { getRules } from 'src/utils/rules'
+import { Button } from 'src/components/Button'
+
+interface StateFormType {
+  email: string
+  password: string
+}
 
 function Login() {
   const {
     register,
     handleSubmit,
-    formState: { errors }
-  } = useForm()
+    formState: { errors },
+    getValues
+  } = useForm<StateFormType>()
+
+  const rules = getRules(getValues)
 
   const onSubmit = handleSubmit((data) => {
     console.log('data', data)
@@ -14,40 +25,34 @@ function Login() {
 
   return (
     <div className='bg-orange'>
-      <div className='mx-auto max-w-7xl px-4'>
+      <div className='container'>
         <div className='grid grid-cols-1 py-12 lg:grid-cols-5 lg:py-32 lg:pr-10'>
           <div className='lg:col-span-2 lg:col-start-4'>
-            <form className='rounded bg-white p-10 shadow-sm' onSubmit={onSubmit}>
+            <form className='rounded bg-white p-10 shadow-sm' onSubmit={onSubmit} noValidate>
               <div className='text-2xl'>Đăng nhập</div>
-              <div className='mt-8'>
-                <input
-                  {...register('email')}
-                  type='email'
-                  name='email'
-                  className='w-full rounded-sm border border-gray-300 p-3 outline-none focus:border-gray-500 focus:shadow-sm'
-                  placeholder='Email...'
-                />
-                {/* <div className='mt-1 min-h-[1rem] text-sm text-red-600'>Email không hợp lệ</div> */}
-              </div>
+              <Input
+                className='mt-8'
+                name='email'
+                type='email'
+                register={register}
+                rules={rules.email}
+                errorMessage={errors.email?.message}
+                placeholder='Email...'
+                autoComplete='on'
+              />
 
-              <div className='mt-3'>
-                <input
-                  {...register('password')}
-                  type='password'
-                  name='password'
-                  className='w-full rounded-sm border border-gray-300 p-3 outline-none focus:border-gray-500 focus:shadow-sm'
-                  placeholder='Password...'
-                />
-                {/* <div className='mt-1 min-h-[1rem] text-sm text-red-600'>Mật khẩu không hợp lệ</div> */}
-              </div>
-              <div className='mt-3'>
-                <button
-                  type='submit'
-                  className='w-full bg-red-500 px-2 py-4 text-center text-sm uppercase text-white hover:bg-red-600'
-                >
-                  Đăng nhập
-                </button>
-              </div>
+              <Input
+                className='mt-3'
+                name='password'
+                type='password'
+                register={register}
+                rules={rules.password}
+                errorMessage={errors.password?.message}
+                placeholder='Mật khẩu...'
+                autoComplete='on'
+              />
+
+              <Button className='mt-3' labelName='Đăng nhập' type='submit' />
 
               <div className='mt-8 flex justify-center'>
                 <span className='text-gray-400'>Bạn mới biết đến Shopee?</span>
