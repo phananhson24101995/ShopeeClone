@@ -1,25 +1,26 @@
 import { Link } from 'react-router-dom'
 import { RegisterOptions, UseFormRegisterReturn, useForm } from 'react-hook-form'
-import { getRules } from 'src/utils/rules'
+import { FormRegisterType, getRules, schema } from 'src/utils/rules'
 import { Input } from 'src/components/Input'
 import { Button } from 'src/components/Button'
+import { yupResolver } from '@hookform/resolvers/yup'
 
-interface StateFormType {
-  email: string
-  password: string
-  confirm_password: string
-}
+// interface StateFormType {
+//   email: string
+//   password: string
+//   confirm_password: string
+// }
+
+type StateFormType = FormRegisterType
 
 function Register() {
   const {
     register,
     handleSubmit,
-    formState: { errors },
-    watch,
-    getValues
-  } = useForm<StateFormType>()
-
-  const rules = getRules(getValues)
+    formState: { errors }
+  } = useForm<StateFormType>({
+    resolver: yupResolver(schema)
+  })
 
   const onSubmit = (data: any, e: any) => {
     console.log('data', data)
@@ -43,7 +44,6 @@ function Register() {
                 type='email'
                 name='email'
                 register={register}
-                rules={rules.email}
                 errorMessage={errors.email?.message}
                 placeholder='Email...'
                 autoComplete='on'
@@ -53,7 +53,6 @@ function Register() {
                 name='password'
                 type='password'
                 register={register}
-                rules={rules.password}
                 errorMessage={errors.password?.message}
                 placeholder='Mật khẩu...'
                 autoComplete='on'
@@ -64,7 +63,6 @@ function Register() {
                 name='confirm_password'
                 type='password'
                 register={register}
-                rules={rules.confirm_password}
                 errorMessage={errors.confirm_password?.message}
                 placeholder='Nhập lại mật khẩu...'
                 autoComplete='on'
