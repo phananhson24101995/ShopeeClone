@@ -1,23 +1,25 @@
 import { Link } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
 import { Input } from 'src/components/Input'
-import { getRules } from 'src/utils/rules'
+import { FormLoginType, schema } from 'src/utils/rules'
 import { Button } from 'src/components/Button'
+import { yupResolver } from '@hookform/resolvers/yup'
 
-interface StateFormType {
-  email: string
-  password: string
-}
+// interface StateFormType {
+//   email: string
+//   password: string
+// }
+
+type StateFormType = FormLoginType
 
 function Login() {
   const {
     register,
     handleSubmit,
-    formState: { errors },
-    getValues
-  } = useForm<StateFormType>()
-
-  const rules = getRules(getValues)
+    formState: { errors }
+  } = useForm<StateFormType>({
+    resolver: yupResolver(schema)
+  })
 
   const onSubmit = handleSubmit((data) => {
     console.log('data', data)
@@ -35,7 +37,6 @@ function Login() {
                 name='email'
                 type='email'
                 register={register}
-                rules={rules.email}
                 errorMessage={errors.email?.message}
                 placeholder='Email...'
                 autoComplete='on'
@@ -46,7 +47,6 @@ function Login() {
                 name='password'
                 type='password'
                 register={register}
-                rules={rules.password}
                 errorMessage={errors.password?.message}
                 placeholder='Mật khẩu...'
                 autoComplete='on'
