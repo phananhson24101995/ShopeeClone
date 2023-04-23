@@ -4,6 +4,9 @@ import { FormRegisterType, getRules, schema } from 'src/utils/rules'
 import { Input } from 'src/components/Input'
 import { Button } from 'src/components/Button'
 import { yupResolver } from '@hookform/resolvers/yup'
+import { useMutation } from '@tanstack/react-query'
+import { registerAccount } from 'src/apis/auth.api'
+import { omit } from 'lodash'
 
 // interface StateFormType {
 //   email: string
@@ -22,8 +25,21 @@ function Register() {
     resolver: yupResolver(schema)
   })
 
+  const registerAccountMutation = useMutation({
+    mutationFn: (body: Omit<StateFormType, 'confirm_password'>) => registerAccount(body)
+  })
+
   const onSubmit = (data: any, e: any) => {
-    console.log('data', data)
+    // const body = omit<StateFormType, 'confirm_password'>(data, ['confirm_password'])
+    delete data.confirm_password
+    registerAccountMutation.mutate(data, {
+      onSuccess(data1) {
+        console.log('data', data1)
+      },
+      onError(error, variables, context) {
+        console.log('error', error)
+      }
+    })
   }
 
   const onError = (errors: any, e: any) => {

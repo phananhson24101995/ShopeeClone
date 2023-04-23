@@ -52,6 +52,7 @@ module.exports = {
         printWidth: 120,
         jsxSingleQuote: true
       }
-    ]
+    ],
+    'import/extensions': 'off'
   }
 }
