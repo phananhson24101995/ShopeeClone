@@ -1,5 +1,5 @@
 import type { RegisterOptions, UseFormGetValues } from 'react-hook-form'
-import * as yup from "yup";
+import * as yup from 'yup'
 
 type RulesType = { [key in 'email' | 'password' | 'confirm_password']?: RegisterOptions }
 
@@ -56,25 +56,27 @@ export const getRules = (getValues?: UseFormGetValues<any>): RulesType => ({
   }
 })
 
-export const schema = yup.object({
-  email: yup
-    .string()
-    .required('Email là trường bắt buộc')
-    .email('Sai định dạng')
-    .min(5, 'Độ dài từ 5 - 160 ký tự')
-    .max(160, 'Độ dài từ 5 - 160 ký tự'),
-  password: yup
-    .string()
-    .required('Password là trường bắt buộc')
-    .min(5, 'Độ dài từ 6 - 160 ký tự')
-    .max(160, 'Độ dài từ 6 - 160 ký tự'),
-  confirm_password: yup
-    .string()
-    .required('Confirm Password là trường bắt buộc')
-    .min(5, 'Độ dài từ 6 - 160 ký tự')
-    .max(160, 'Độ dài từ 6 - 160 ký tự')
-    .oneOf([yup.ref('password')], 'Mật khẩu và mật khẩu nhập lại không trùng nhau')
-}).required();
+export const schema = yup
+  .object({
+    email: yup
+      .string()
+      .required('Email là trường bắt buộc')
+      .email('Sai định dạng')
+      .min(5, 'Độ dài từ 5 - 160 ký tự')
+      .max(160, 'Độ dài từ 5 - 160 ký tự'),
+    password: yup
+      .string()
+      .required('Password là trường bắt buộc')
+      .min(5, 'Độ dài từ 6 - 160 ký tự')
+      .max(160, 'Độ dài từ 6 - 160 ký tự'),
+    confirm_password: yup
+      .string()
+      .required('Confirm Password là trường bắt buộc')
+      .min(5, 'Độ dài từ 6 - 160 ký tự')
+      .max(160, 'Độ dài từ 6 - 160 ký tự')
+      .oneOf([yup.ref('password')], 'Mật khẩu và mật khẩu nhập lại không trùng nhau')
+  })
+  .required()
 
 export type FormRegisterType = yup.InferType<typeof schema>
 const schemaLogin = schema.omit(['confirm_password'])

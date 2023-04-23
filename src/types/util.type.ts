@@ -1,5 +1,5 @@
 // Interface tiện ích
 export interface ResponseApi<Data> {
-  message: string,
+  message: string
   data?: Data
 }
