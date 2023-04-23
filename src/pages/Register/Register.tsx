@@ -4,6 +4,11 @@ import { FormRegisterType, getRules, schema } from 'src/utils/rules'
 import { Input } from 'src/components/Input'
 import { Button } from 'src/components/Button'
 import { yupResolver } from '@hookform/resolvers/yup'
+import { useMutation } from '@tanstack/react-query'
+import { registerAccount } from 'src/apis/auth.api'
+import { omit } from 'lodash'
+import { isAxiosUnprocessableEntityError } from 'src/utils/utils'
+import { ResponseApi } from 'src/types/util.type'
 
 // interface StateFormType {
 //   email: string
@@ -17,13 +22,50 @@ function Register() {
   const {
     register,
     handleSubmit,
-    formState: { errors }
+    formState: { errors },
+    setError
   } = useForm<StateFormType>({
     resolver: yupResolver(schema)
   })
 
-  const onSubmit = (data: any, e: any) => {
-    console.log('data', data)
+  const registerAccountMutation = useMutation({
+    mutationFn: (body: Omit<StateFormType, 'confirm_password'>) => registerAccount(body)
+  })
+
+  const onSubmit = (data: StateFormType) => {
+    const body = omit<StateFormType, 'confirm_password'>(data, ['confirm_password'])
+    // delete data.confirm_password
+    registerAccountMutation.mutate(body, {
+      onSuccess(data1) {
+        console.log('data', data1)
+      },
+      onError(error) {
+        if (isAxiosUnprocessableEntityError<ResponseApi<Omit<StateFormType, 'confirm_password'>>>(error)) {
+          const formError = error.response?.data.data
+          if (formError) {
+            Object.keys(formError).forEach((key) => {
+              const field = key as keyof Omit<StateFormType, 'confirm_password'>
+              setError(field, {
+                message: formError[field],
+                type: 'Server'
+              })
+            })
+          }
+          // if (formError?.email) {
+          //   setError('email', {
+          //     message: formError.email,
+          //     type: 'Server'
+          //   })
+          // }
+          // if (formError?.password) {
+          //   setError('password', {
+          //     message: formError.password,
+          //     type: 'Server'
+          //   })
+          // }
+        }
+      }
+    })
   }
 
   const onError = (errors: any, e: any) => {
