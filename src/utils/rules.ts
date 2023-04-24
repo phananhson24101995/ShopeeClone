@@ -79,5 +79,5 @@ export const schema = yup
   .required()
 
 export type FormRegisterType = yup.InferType<typeof schema>
-const schemaLogin = schema.omit(['confirm_password'])
-export type FormLoginType = yup.InferType<typeof schemaLogin>
+
+export type Schema = yup.InferType<typeof schema>

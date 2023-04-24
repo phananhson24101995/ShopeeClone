@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom'
-import { RegisterOptions, UseFormRegisterReturn, useForm } from 'react-hook-form'
-import { FormRegisterType, getRules, schema } from 'src/utils/rules'
+import { useForm } from 'react-hook-form'
+import { FormRegisterType, schema } from 'src/utils/rules'
 import { Input } from 'src/components/Input'
 import { Button } from 'src/components/Button'
 import { yupResolver } from '@hookform/resolvers/yup'
@@ -51,35 +51,17 @@ function Register() {
               })
             })
           }
-          // if (formError?.email) {
-          //   setError('email', {
-          //     message: formError.email,
-          //     type: 'Server'
-          //   })
-          // }
-          // if (formError?.password) {
-          //   setError('password', {
-          //     message: formError.password,
-          //     type: 'Server'
-          //   })
-          // }
         }
       }
     })
   }
 
-  const onError = (errors: any, e: any) => {
-    console.log('')
-  }
-
-  // const formVal = watch('email')
-  // console.log('formVal', formVal)
   return (
     <div className='bg-orange'>
       <div className='container'>
         <div className='grid grid-cols-1 py-12 lg:grid-cols-5 lg:py-32 lg:pr-10'>
           <div className='lg:col-span-2 lg:col-start-4'>
-            <form className='rounded bg-white p-10 shadow-sm' onSubmit={handleSubmit(onSubmit, onError)} noValidate>
+            <form className='rounded bg-white p-10 shadow-sm' onSubmit={handleSubmit(onSubmit)} noValidate>
               <div className='text-2xl'>Đăng ký</div>
               <Input
                 className='mt-8'
