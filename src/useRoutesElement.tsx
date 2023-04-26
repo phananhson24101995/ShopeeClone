@@ -3,15 +3,20 @@ import { ProductList } from './pages/ProductList'
 import { Login } from './pages/Login'
 import { Register } from './pages/Register'
 import { RegisterLayout } from './layouts/RegisterLayout'
+import { MainLayout } from './layouts/MainLayout'
 
 export default function useRoutesElement() {
   const routeeElement = useRoutes([
     {
-      path: '/products',
-      element: <ProductList />
+      path: '/',
+      element: (
+        <MainLayout>
+          <ProductList />
+        </MainLayout>
+      )
     },
     {
-      path: '/',
+      path: '/login',
       element: (
         <RegisterLayout>
           <Login />
