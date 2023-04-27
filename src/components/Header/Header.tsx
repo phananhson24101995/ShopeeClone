@@ -1,29 +1,7 @@
 import { Link } from 'react-router-dom'
-import { useHover, useFloating, useInteractions, FloatingPortal, FloatingArrow, arrow } from '@floating-ui/react'
-import { useRef, useState } from 'react'
-import { shift } from '@floating-ui/dom'
-import { motion, AnimatePresence } from 'framer-motion'
+import { Propover } from '../Propover'
 
 function Header() {
-  const arrowRef = useRef(null)
-  const [isOpen, setIsOpen] = useState(false)
-  const { x, y, strategy, refs, context, middlewareData } = useFloating({
-    middleware: [
-      shift(),
-      arrow({
-        element: arrowRef
-      })
-    ]
-  })
-
-  const showPopover = () => {
-    setIsOpen(true)
-  }
-
-  const hidePopover = () => {
-    setIsOpen(false)
-  }
-
   return (
     <div className=' bg-[linear-gradient(-180deg,#f53d2d,#f63)] pb-5 pt-2 text-white'>
       <div className='container'>
@@ -42,11 +20,16 @@ function Header() {
             </div>
           </div>
           <div className='flex'>
-            <div
-              ref={refs.setReference}
-              onMouseEnter={showPopover}
-              onMouseLeave={hidePopover}
+            <Propover
+              placement='bottom-end'
+              as='span'
               className='mr-3 flex cursor-pointer items-center py-1 hover:text-gray-300'
+              renderPropover={
+                <div className='relative flex flex-col rounded-sm bg-white px-2 py-1 pl-2 pr-32 shadow-md'>
+                  <button className='flex flex-col px-3 py-3 hover:text-orange'>Tiếng Việt</button>
+                  <button className='flex flex-col px-3 py-3 hover:text-orange'>English</button>
+                </div>
+              }
             >
               <svg
                 xmlns='http://www.w3.org/2000/svg'
@@ -73,43 +56,20 @@ function Header() {
               >
                 <path strokeLinecap='round' strokeLinejoin='round' d='M19.5 8.25l-7.5 7.5-7.5-7.5' />
               </svg>
+            </Propover>
 
-              <FloatingPortal>
-                <AnimatePresence>
-                  {isOpen && (
-                    <motion.div
-                      ref={refs.setFloating}
-                      style={{
-                        position: strategy,
-                        top: y ?? 0,
-                        left: x ?? 0,
-                        transformOrigin: `${middlewareData.arrow?.x}px top`
-                      }}
-                      initial={{ opacity: 0, transform: 'scale(0)' }}
-                      animate={{ opacity: 1, transform: 'scale(1)' }}
-                      exit={{ opacity: 0, transform: 'scale(0)' }}
-                      transition={{ duration: 2 }}
-                    >
-                      <FloatingArrow
-                        fill='#fff'
-                        ref={arrowRef}
-                        context={context}
-                        style={{
-                          left: middlewareData.arrow?.x,
-                          top: middlewareData.arrow?.y
-                        }}
-                      />
-                      <div className='relative flex flex-col rounded-sm bg-white shadow-md'>
-                        <button className='flex flex-col px-3 py-2 hover:text-orange'>Tiếng Việt</button>
-                        <button className='flex flex-col px-3 py-2 hover:text-orange'>English</button>
-                      </div>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-              </FloatingPortal>
-            </div>
-
-            <div className='ml-3 flex cursor-pointer items-center py-1 hover:text-gray-300'>
+            <Propover
+              placement='bottom'
+              as='span'
+              renderPropover={
+                <div className='mr-3 flex flex-col rounded-sm bg-white px-2 py-1 shadow-md'>
+                  <button className='flex flex-col px-3 py-3 hover:text-cyan-500'>Tài Khoản Của Tôi</button>
+                  <button className='flex flex-col px-3 py-3 hover:text-cyan-500'>Đơn Mua</button>
+                  <button className='flex flex-col px-3 py-3 hover:text-cyan-500'>Đăng Xuất</button>
+                </div>
+              }
+              className='ml-3 flex cursor-pointer items-center py-1 hover:text-gray-300'
+            >
               <div className='mr-2 h-5 w-5 flex-shrink-0'>
                 <img
                   src='https://down-vn.img.susercontent.com/file/7ed5792e0a57bc24746c4e1f490d2a67_tn'
@@ -118,7 +78,7 @@ function Header() {
                 />
               </div>
               <span className='mx-1'>Phan Anh Sơn</span>
-            </div>
+            </Propover>
           </div>
         </div>
         <div className='grid grid-cols-12 items-end gap-4 pb-3 pt-4'>
@@ -158,22 +118,61 @@ function Header() {
             </div>
           </form>
           <div className='col-span-1 justify-self-end'>
-            <Link to='/' className='relative'>
-              <svg
-                xmlns='http://www.w3.org/2000/svg'
-                fill='none'
-                viewBox='0 0 24 24'
-                strokeWidth={1.5}
-                stroke='currentColor'
-                className='h-8 w-8'
-              >
-                <path
-                  strokeLinecap='round'
-                  strokeLinejoin='round'
-                  d='M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 00-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 00-16.536-1.84M7.5 14.25L5.106 5.272M6 20.25a.75.75 0 11-1.5 0 .75.75 0 011.5 0zm12.75 0a.75.75 0 11-1.5 0 .75.75 0 011.5 0z'
-                />
-              </svg>
-            </Link>
+            <Propover
+              placement='bottom-end'
+              initialOpen={true}
+              renderPropover={
+                <div className='rounded-sm bg-white shadow-sm'>
+                  <div className='relative max-w-[400px] rounded-sm border border-gray-200 bg-white text-sm shadow-md'>
+                    <div className='p-2'>
+                      <div className='capitalize text-gray-400'>Sản phẩm mới thêm</div>
+                      <div className='mt-5'>
+                        <div className='mt-2 flex py-2 hover:bg-gray-100'>
+                          <div className='flex-shrink-0'>
+                            <img
+                              src='https://down-vn.img.susercontent.com/file/sg-11134201-22100-xht2eg8eqhivf7_tn'
+                              alt='img'
+                              className='h-11 w-11 object-cover
+                              '
+                            />
+                          </div>
+                          <div className='ml-2 flex-grow overflow-hidden'>
+                            <div className='truncate'>Giường xếp văn phòng ngủ trưa</div>
+                          </div>
+                          <div className='ml-2 flex-shrink-0'>
+                            <span className='text-orange'>đ200000</span>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div className='mt-6 flex items-center justify-between'>
+                        <div className='text-xs capitalize text-gray-500'>Thêm vào giỏ hàng</div>
+                        <button className='rounded-sm bg-orange px-4 py-2 capitalize text-white hover:bg-opacity-90'>
+                          Xem giỏ hàng
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              }
+            >
+              <Link to='/' className='relative'>
+                <svg
+                  xmlns='http://www.w3.org/2000/svg'
+                  fill='none'
+                  viewBox='0 0 24 24'
+                  strokeWidth={1.5}
+                  stroke='currentColor'
+                  className='h-8 w-8'
+                >
+                  <path
+                    strokeLinecap='round'
+                    strokeLinejoin='round'
+                    d='M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 00-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 00-16.536-1.84M7.5 14.25L5.106 5.272M6 20.25a.75.75 0 11-1.5 0 .75.75 0 011.5 0zm12.75 0a.75.75 0 11-1.5 0 .75.75 0 011.5 0z'
+                  />
+                </svg>
+              </Link>
+            </Propover>
           </div>
         </div>
       </div>
