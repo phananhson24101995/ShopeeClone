@@ -63,7 +63,9 @@ function Header() {
               as='span'
               renderPropover={
                 <div className='mr-3 flex flex-col rounded-sm bg-white px-2 py-1 shadow-md'>
-                  <button className='flex flex-col px-3 py-3 hover:text-cyan-500'>Tài Khoản Của Tôi</button>
+                  <Link to='/profile' className='flex flex-col px-3 py-3 hover:text-cyan-500'>
+                    Tài Khoản Của Tôi
+                  </Link>
                   <button className='flex flex-col px-3 py-3 hover:text-cyan-500'>Đơn Mua</button>
                   <button className='flex flex-col px-3 py-3 hover:text-cyan-500'>Đăng Xuất</button>
                 </div>
@@ -120,7 +122,6 @@ function Header() {
           <div className='col-span-1 justify-self-end'>
             <Propover
               placement='bottom-end'
-              initialOpen={true}
               renderPropover={
                 <div className='rounded-sm bg-white shadow-sm'>
                   <div className='relative max-w-[400px] rounded-sm border border-gray-200 bg-white text-sm shadow-md'>
