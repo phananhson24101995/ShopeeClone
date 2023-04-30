@@ -85,7 +85,14 @@ function Login() {
                 autoComplete='on'
               />
 
-              <Button className='mt-3' labelName='Đăng nhập' type='submit' />
+              <Button
+                type='submit'
+                className='flex w-full items-center justify-center bg-red-500 px-2 py-4 text-center text-sm uppercase text-white hover:bg-red-600'
+                isLoading={loginUserMutation.isLoading}
+                disabled={loginUserMutation.isLoading}
+              >
+                Đăng nhập
+              </Button>
 
               <div className='mt-8 flex justify-center'>
                 <span className='text-gray-400'>Bạn mới biết đến Shopee?</span>

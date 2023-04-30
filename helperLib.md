@@ -20,6 +20,11 @@
 
 `npm install tailwindcss`
 
+## Hỗ trợ tailwind
+
+`https://flowbite.com/`
+`https://tailwindcss.com/`
+
 # 7. Tự động thêm tiền tố css vào các thiết bị
 
 `npm install autoprefixer`

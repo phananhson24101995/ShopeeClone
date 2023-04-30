@@ -96,7 +96,14 @@ function Register() {
                 placeholder='Nhập lại mật khẩu...'
                 autoComplete='on'
               />
-              <Button className='mt-3' labelName='Đăng ký' type='submit' />
+              <Button
+                className='flex w-full bg-red-500 px-2 py-4 text-center text-sm uppercase text-white hover:bg-red-600'
+                type='submit'
+                disabled={registerAccountMutation.isLoading}
+                isLoading={registerAccountMutation.isLoading}
+              >
+                Đăng ký
+              </Button>
 
               <div className='mt-8 flex justify-center'>
                 <span className='text-gray-400'>Bạn đã có tài khoản?</span>
