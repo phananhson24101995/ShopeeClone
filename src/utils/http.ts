@@ -31,10 +31,10 @@ class Http {
     this.instance.interceptors.response.use((response) => {
       console.log('response', response);
       const { url } = response.config
-      if (url === '/login' || url === '/register') {
-        this.accessToken = (response.config.data as AuthResponse).data.access_token
+      if (url === 'login' || url === 'register') {
+        this.accessToken = (response.data as AuthResponse).data.access_token
         saveAccessTokenToLS(this.accessToken)
-      } else if (url === '/logout') {
+      } else if (url === 'logout') {
         this.accessToken = ''
         clearAccessTokenFromLS()
       }
