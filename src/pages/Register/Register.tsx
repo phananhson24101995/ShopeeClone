@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
 import { FormRegisterType, schema } from 'src/utils/rules'
 import { Input } from 'src/components/Input'
@@ -9,6 +9,8 @@ import { registerAccount } from 'src/apis/auth.api'
 import { omit } from 'lodash'
 import { isAxiosUnprocessableEntityError } from 'src/utils/utils'
 import { ErrorResponse } from 'src/types/util.type'
+import { useContext } from 'react'
+import { AppContext } from 'src/contexts/app.context'
 
 // interface StateFormType {
 //   email: string
@@ -19,6 +21,8 @@ import { ErrorResponse } from 'src/types/util.type'
 type StateFormType = FormRegisterType
 
 function Register() {
+  const { setIsAuthenticated } = useContext(AppContext)
+  const navigate = useNavigate()
   const {
     register,
     handleSubmit,
@@ -37,7 +41,8 @@ function Register() {
     // delete data.confirm_password
     registerAccountMutation.mutate(body, {
       onSuccess(data1) {
-        console.log('data', data1)
+        setIsAuthenticated(true)
+        navigate('/')
       },
       onError(error) {
         if (isAxiosUnprocessableEntityError<ErrorResponse<Omit<StateFormType, 'confirm_password'>>>(error)) {
