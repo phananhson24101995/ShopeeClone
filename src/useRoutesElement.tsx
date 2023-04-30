@@ -5,7 +5,7 @@ import { Register } from './pages/Register'
 import { RegisterLayout } from './layouts/RegisterLayout'
 import { MainLayout } from './layouts/MainLayout'
 import { Profile } from './pages/Profile'
-const isAuthenticated = true
+const isAuthenticated = false
 function ProtectedRoute() {
   return isAuthenticated ? <Outlet /> : <Navigate to='/login' />
 }

@@ -8,7 +8,7 @@ import { useMutation } from '@tanstack/react-query'
 import { registerAccount } from 'src/apis/auth.api'
 import { omit } from 'lodash'
 import { isAxiosUnprocessableEntityError } from 'src/utils/utils'
-import { ResponseApi } from 'src/types/util.type'
+import { ErrorResponse } from 'src/types/util.type'
 
 // interface StateFormType {
 //   email: string
@@ -40,7 +40,7 @@ function Register() {
         console.log('data', data1)
       },
       onError(error) {
-        if (isAxiosUnprocessableEntityError<ResponseApi<Omit<StateFormType, 'confirm_password'>>>(error)) {
+        if (isAxiosUnprocessableEntityError<ErrorResponse<Omit<StateFormType, 'confirm_password'>>>(error)) {
           const formError = error.response?.data.data
           if (formError) {
             Object.keys(formError).forEach((key) => {
