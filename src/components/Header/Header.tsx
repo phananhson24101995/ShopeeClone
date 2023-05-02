@@ -4,15 +4,18 @@ import { useContext } from 'react'
 import { AppContext } from 'src/contexts/app.context'
 import { useMutation } from '@tanstack/react-query'
 import { logoutUser } from 'src/apis/auth.api'
-import { BellIcon, CartIcon, HelpIcon, LanguageIcon, LogoShopee, SearchIcon } from 'src/icons'
-import ChevronDownIcon from 'src/icons/ChevronDownIcon'
+import { BellIcon, CartIcon, HelpIcon, LanguageIcon, LogoShopee, SearchIcon, ChevronDownIcon } from 'src/icons'
+import path from 'src/constants/path'
 
 function Header() {
-  const { setIsAuthenticated, isAuthenticated } = useContext(AppContext)
+  const { setIsAuthenticated, isAuthenticated, setProfile, profile } = useContext(AppContext)
+  console.log('profile', profile)
+
   const logoutMutation = useMutation({
     mutationFn: logoutUser,
     onSuccess: () => {
       setIsAuthenticated(false)
+      setProfile(null)
     }
   })
 
@@ -43,14 +46,14 @@ function Header() {
           </div>
           <div className='flex'>
             <div className='flex items-center'>
-              <div className='mr-3 flex cursor-pointer items-center py-1 hover:text-gray-300'>
+              <div className='mr-3 flex cursor-pointer items-center py-1 hover:text-white/70'>
                 <BellIcon />
                 <span className='mx-1'>Thông báo</span>
               </div>
             </div>
 
             <div className='flex items-center'>
-              <div className='mr-3 flex cursor-pointer items-center py-1 hover:text-gray-300'>
+              <div className='mr-3 flex cursor-pointer items-center py-1 hover:text-white/70'>
                 <HelpIcon />
                 <span className='mx-1'>Hỗ trợ</span>
               </div>
@@ -59,7 +62,7 @@ function Header() {
             <Propover
               placement='bottom-end'
               as='span'
-              className='mr-3 flex cursor-pointer items-center py-1 hover:text-gray-300'
+              className='mr-3 flex cursor-pointer items-center py-1 hover:text-white/70'
               renderPropover={
                 <div className='relative flex flex-col rounded-sm bg-white px-2 py-1 pl-2 pr-32 shadow-md'>
                   <button className='flex flex-col px-3 py-3 hover:text-orange'>Tiếng Việt</button>
@@ -78,7 +81,7 @@ function Header() {
                 as='span'
                 renderPropover={
                   <div className='mr-3 flex flex-col rounded-sm bg-white px-2 py-1 shadow-md'>
-                    <Link to='/profile' className='flex flex-col px-3 py-3 hover:text-cyan-500'>
+                    <Link to={path.profile} className='flex flex-col px-3 py-3 hover:text-cyan-500'>
                       Tài Khoản Của Tôi
                     </Link>
                     <button className='flex flex-col px-3 py-3 hover:text-cyan-500'>Đơn Mua</button>
@@ -87,7 +90,7 @@ function Header() {
                     </button>
                   </div>
                 }
-                className='ml-3 flex cursor-pointer items-center py-1 hover:text-gray-300'
+                className='ml-3 flex cursor-pointer items-center py-1 hover:text-white/70'
               >
                 <div className='mr-2 h-5 w-5 flex-shrink-0'>
                   <img
@@ -96,17 +99,17 @@ function Header() {
                     className='h-full w-full rounded-full object-cover'
                   />
                 </div>
-                <span className='mx-1'>Phan Anh Sơn</span>
+                <span className='mx-1'>{profile?.email}</span>
               </Propover>
             )}
 
             {!isAuthenticated && (
               <div className='flex items-center'>
-                <Link to='/register' className='mx-3 capitalize hover:text-white/70'>
+                <Link to={path.register} className='mx-3 capitalize hover:text-white/70'>
                   Đăng ký
                 </Link>
                 <div className='h-4 border-r-[1px] border-r-white/40'></div>
-                <Link to='/login' className='mx-3 capitalize hover:text-white/70'>
+                <Link to={path.login} className='mx-3 capitalize hover:text-white/70'>
                   Đăng nhập
                 </Link>
               </div>
@@ -114,7 +117,7 @@ function Header() {
           </div>
         </div>
         <div className='grid grid-cols-12 items-end gap-4 pb-3 pt-4'>
-          <Link to={'/'} className='col-span-2'>
+          <Link to='/' className='col-span-2'>
             <LogoShopee />
           </Link>
 
@@ -161,7 +164,7 @@ function Header() {
 
                       <div className='mt-6 flex items-center justify-between'>
                         <div className='text-xs capitalize text-gray-500'>Thêm vào giỏ hàng</div>
-                        <button className='rounded-sm bg-orange px-4 py-2 capitalize text-white hover:bg-opacity-90'>
+                        <button className='rounded-sm bg-orange px-4 py-2 capitalize text-white hover:text-white/70'>
                           Xem giỏ hàng
                         </button>
                       </div>

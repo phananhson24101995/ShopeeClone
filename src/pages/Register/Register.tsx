@@ -11,6 +11,7 @@ import { isAxiosUnprocessableEntityError } from 'src/utils/utils'
 import { ErrorResponse } from 'src/types/util.type'
 import { useContext } from 'react'
 import { AppContext } from 'src/contexts/app.context'
+import { AuthResponse } from 'src/types/auth.type'
 
 // interface StateFormType {
 //   email: string
@@ -21,7 +22,7 @@ import { AppContext } from 'src/contexts/app.context'
 type StateFormType = FormRegisterType
 
 function Register() {
-  const { setIsAuthenticated } = useContext(AppContext)
+  const { setIsAuthenticated, setProfile } = useContext(AppContext)
   const navigate = useNavigate()
   const {
     register,
@@ -42,6 +43,7 @@ function Register() {
     registerAccountMutation.mutate(body, {
       onSuccess(data1) {
         setIsAuthenticated(true)
+        setProfile((data1.data as AuthResponse).data.user)
         navigate('/')
       },
       onError(error) {
