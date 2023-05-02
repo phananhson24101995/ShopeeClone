@@ -10,6 +10,7 @@ import { isAxiosUnprocessableEntityError } from 'src/utils/utils'
 import { ErrorResponse } from 'src/types/util.type'
 import { useContext } from 'react'
 import { AppContext } from 'src/contexts/app.context'
+import { AuthResponse } from 'src/types/auth.type'
 
 // interface StateFormType {
 //   email: string
@@ -20,7 +21,7 @@ type StateFormType = Pick<Schema, 'email' | 'password'>
 const loginSchema = schema.pick(['email', 'password'])
 
 function Login() {
-  const { setIsAuthenticated } = useContext(AppContext)
+  const { setIsAuthenticated, setProfile } = useContext(AppContext)
   const navigate = useNavigate()
   const {
     register,
@@ -37,8 +38,10 @@ function Login() {
 
   const onSubmit = (data: StateFormType) => {
     loginUserMutation.mutate(data, {
-      onSuccess: () => {
+      onSuccess: (data) => {
         setIsAuthenticated(true)
+        console.log(data)
+        setProfile((data.data as AuthResponse).data.user)
         navigate('/')
       },
       onError: (error) => {
