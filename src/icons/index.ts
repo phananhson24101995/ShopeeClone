@@ -10,6 +10,8 @@ export { default as FilterIcon } from './FilterIcon'
 export { default as CategoryIcon } from './CategoryIcon'
 export { default as DropDownArrowRightIcon } from './DropDownArrowRightIcon'
 export { default as StarIcon } from './StarIcon'
+export { default as ChevronLeft } from './ChevronLeft'
+export { default as ChevronRight } from './ChevronRight'
 
 
 
