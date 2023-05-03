@@ -46,3 +46,7 @@
 # 11. Icon
 
 `https://heroicons.com/`
+
+# 12. Format Currency
+
+`https://dev.to/saranshk/how-to-format-a-number-as-currency-in-javascript-587b`
