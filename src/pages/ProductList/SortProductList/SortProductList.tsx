@@ -16,7 +16,7 @@ export default function SortProductList() {
             Bán chạy
           </button>
           <select
-            value={''}
+            defaultValue={''}
             placeholder='Giá'
             className='h-8 bg-white px-4 text-sm capitalize text-black outline-none hover:bg-slate-100'
           >
