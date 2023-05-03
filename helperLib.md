@@ -24,6 +24,7 @@
 
 `https://flowbite.com/`
 `https://tailwindcss.com/`
+`Cài đặt cho khi chữ nhiều quá thì sẽ có dấu ...: npm install @tailwindcss/line-clamp`
 
 # 7. Tự động thêm tiền tố css vào các thiết bị
 
