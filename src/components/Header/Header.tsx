@@ -3,7 +3,7 @@ import { Propover } from '../Propover'
 import { useContext } from 'react'
 import { AppContext } from 'src/contexts/app.context'
 import { useMutation } from '@tanstack/react-query'
-import { logoutUser } from 'src/apis/auth.api'
+import authApi from 'src/apis/auth.api'
 import { BellIcon, CartIcon, HelpIcon, LanguageIcon, LogoShopee, SearchIcon, ChevronDownIcon } from 'src/icons'
 import path from 'src/constants/path'
 
@@ -12,7 +12,7 @@ function Header() {
   console.log('profile', profile)
 
   const logoutMutation = useMutation({
-    mutationFn: logoutUser,
+    mutationFn: authApi.logoutUser,
     onSuccess: () => {
       setIsAuthenticated(false)
       setProfile(null)

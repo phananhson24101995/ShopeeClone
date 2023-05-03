@@ -12,6 +12,6 @@ const path: PathType = {
   login: '/login',
   register: '/register',
   logout: '/logout'
-}
+} as const
 
 export default path
