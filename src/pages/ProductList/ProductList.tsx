@@ -8,6 +8,7 @@ import { Pagination } from 'src/components/Pagination'
 import { useState } from 'react'
 import { ProductListConfig } from 'src/types/product.type'
 import { omitBy, isUndefined } from 'lodash'
+import categoryApi from 'src/apis/category.api'
 
 export type QueryConfig = {
   [key in keyof ProductListConfig]: string
@@ -18,44 +19,54 @@ function ProductList() {
   const queryConfig: QueryConfig = omitBy(
     {
       page: queryParams.page || '1',
-      limit: queryParams.limit || '10',
+      limit: queryParams.limit || '5',
       exclude: queryParams.exclude,
       name: queryParams.name,
       order: queryParams.order,
       price_max: queryParams.price_max,
       price_min: queryParams.price_min,
       rating_filter: queryParams.rating_filter,
-      sort_by: queryParams.sort_by
+      sort_by: queryParams.sort_by,
+      category: queryParams.category
     },
     isUndefined
   )
-  const { data } = useQuery({
+  // Get Products
+  const { data: productsData } = useQuery({
     queryKey: ['products', queryConfig],
     queryFn: () => {
       return productApi.getProducts(queryConfig as ProductListConfig)
     },
     keepPreviousData: true // Không set data về undefined để tránh load lại UI
   })
-  console.log('data', data)
+
+  // Get Categories
+  const { data: categoriesData } = useQuery({
+    queryKey: ['categories'],
+    queryFn: () => {
+      return categoryApi.getCategoties()
+    },
+    keepPreviousData: true // Không set data về undefined để tránh load lại UI
+  })
 
   return (
     <div className='bg-gray-200 py-6'>
       <div className='container'>
-        {data && (
+        {productsData && (
           <div className='grid grid-cols-12 gap-6'>
             <div className='col-span-3'>
-              <AsideFilter />
+              <AsideFilter queryConfig={queryConfig} categoriesData={categoriesData?.data.data || []} />
             </div>
             <div className='col-span-9'>
-              <SortProductList queryConfig={queryConfig} pageSize={data.data.data.pagination.page_size} />
+              <SortProductList queryConfig={queryConfig} pageSize={productsData.data.data.pagination.page_size} />
               <div className='mt-6 grid grid-cols-2 gap-3 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5'>
-                {data.data.data.products.map((product) => (
+                {productsData.data.data.products.map((product) => (
                   <div key={product._id} className='col-span-1'>
                     <Product product={product} />
                   </div>
                 ))}
               </div>
-              <Pagination queryConfig={queryConfig} pageSize={data.data.data.pagination.page_size} />
+              <Pagination queryConfig={queryConfig} pageSize={productsData.data.data.pagination.page_size} />
             </div>
           </div>
         )}

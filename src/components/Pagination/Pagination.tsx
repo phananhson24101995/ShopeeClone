@@ -19,6 +19,7 @@
 import classNames from 'classnames'
 import { Link, createSearchParams } from 'react-router-dom'
 import path from 'src/constants/path'
+import { ChevronLeft, ChevronRight } from 'src/icons'
 import { QueryConfig } from 'src/pages/ProductList/ProductList'
 
 interface Props {
@@ -93,7 +94,9 @@ export default function Pagination({ queryConfig, pageSize }: Props) {
   return (
     <div className='mt-6 flex flex-wrap justify-center'>
       {page === 1 ? (
-        <button className='mx-2 cursor-not-allowed rounded border bg-white/60 px-3 py-2 shadow-sm'>Prev</button>
+        <button className='mx-2 cursor-not-allowed rounded border bg-white/60 px-3 py-2 shadow-sm'>
+          <ChevronLeft />
+        </button>
       ) : (
         <Link
           to={{
@@ -105,13 +108,15 @@ export default function Pagination({ queryConfig, pageSize }: Props) {
           }}
           className='mx-2 rounded border bg-white px-3 py-2 shadow-sm'
         >
-          Prev
+          <ChevronLeft />
         </Link>
       )}
 
       {renderPagination()}
       {page === pageSize ? (
-        <button className='mx-2 cursor-not-allowed rounded border bg-white/60 px-3 py-2 shadow-sm'>Next</button>
+        <button className='mx-2 cursor-not-allowed rounded border bg-white/60 px-3 py-2 shadow-sm'>
+          <ChevronRight />
+        </button>
       ) : (
         <Link
           to={{
@@ -123,7 +128,7 @@ export default function Pagination({ queryConfig, pageSize }: Props) {
           }}
           className='mx-2 rounded border bg-white px-3 py-2 shadow-sm'
         >
-          Next
+          <ChevronRight />
         </Link>
       )}
     </div>
