@@ -1,6 +1,6 @@
 import { Link, useNavigate } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
-import { FormRegisterType, schema } from 'src/utils/rules'
+import { FormRegisterType, Schema, schema } from 'src/utils/rules'
 import { Input } from 'src/components/Input'
 import { Button } from 'src/components/Button'
 import { yupResolver } from '@hookform/resolvers/yup'
@@ -19,7 +19,8 @@ import { AuthResponse } from 'src/types/auth.type'
 //   confirm_password: string
 // }
 
-type StateFormType = FormRegisterType
+type StateFormType = Pick<Schema, 'email' | 'password' | 'confirm_password'>
+const registerSchema = schema.pick(['email', 'password', 'confirm_password'])
 
 function Register() {
   const { setIsAuthenticated, setProfile } = useContext(AppContext)
@@ -30,7 +31,7 @@ function Register() {
     formState: { errors },
     setError
   } = useForm<StateFormType>({
-    resolver: yupResolver(schema)
+    resolver: yupResolver(registerSchema)
   })
 
   const registerAccountMutation = useMutation({
