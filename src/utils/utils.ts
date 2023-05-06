@@ -18,5 +18,10 @@ export function formatNumberToSocialStyle(value: number) {
   return new Intl.NumberFormat('en', {
     notation: 'compact',
     maximumFractionDigits: 1
-  }).format(value).replace('.', ',').toLowerCase()
+  })
+    .format(value)
+    .replace('.', ',')
+    .toLowerCase()
 }
+
+export const rateSale = (original: number, sale: number) => Math.round(((original - sale) / original) * 100) + '%'
