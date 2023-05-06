@@ -12,6 +12,7 @@ export { default as DropDownArrowRightIcon } from './DropDownArrowRightIcon'
 export { default as StarIcon } from './StarIcon'
 export { default as ChevronLeft } from './ChevronLeft'
 export { default as ChevronRight } from './ChevronRight'
+export { default as StarIconWhite } from './StarIconWhite'
 
 
 
