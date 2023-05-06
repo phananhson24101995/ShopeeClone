@@ -1,9 +1,10 @@
 interface PathType {
-  home: string,
-  profile: string,
-  login: string,
-  register: string,
+  home: string
+  profile: string
+  login: string
+  register: string
   logout: string
+  productDetail: string
 }
 
 const path: PathType = {
@@ -11,7 +12,8 @@ const path: PathType = {
   profile: '/profile',
   login: '/login',
   register: '/register',
-  logout: '/logout'
+  logout: '/logout',
+  productDetail: ':id'
 } as const
 
 export default path

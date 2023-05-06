@@ -50,3 +50,10 @@
 # 12. Format Currency
 
 `https://dev.to/saranshk/how-to-format-a-number-as-currency-in-javascript-587b`
+
+# 13. DOMPurify
+
+`Loại bỏ đi các đoạn mã javascipt trong chuỗi string`
+
+`npm i dompurify`
+`npm i @types/dompurify`

@@ -9,7 +9,6 @@ import path from 'src/constants/path'
 
 function Header() {
   const { setIsAuthenticated, isAuthenticated, setProfile, profile } = useContext(AppContext)
-  console.log('profile', profile)
 
   const logoutMutation = useMutation({
     mutationFn: authApi.logoutUser,

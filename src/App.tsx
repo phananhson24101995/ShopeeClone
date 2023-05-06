@@ -4,8 +4,6 @@ import 'react-toastify/dist/ReactToastify.css'
 
 function App() {
   const routesElement = useRoutesElement()
-  console.log('routesElement', routesElement)
-
   return (
     <div>
       {routesElement}
