@@ -10,6 +10,8 @@ import { useForm, Controller } from 'react-hook-form'
 import { Schema, schema } from 'src/utils/rules'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { NoUndefinedField } from 'src/types/util.type'
+import { RatingStar } from '../RatingStar'
+import { omit } from 'lodash'
 
 interface Props {
   categoriesData: Category[]
@@ -31,7 +33,8 @@ export default function AsideFilter({ categoriesData, queryConfig }: Props) {
     control,
     handleSubmit,
     trigger,
-    formState: { errors }
+    formState: { errors },
+    reset
   } = useForm<FormDate>({
     defaultValues: {
       price_max: '',
@@ -51,6 +54,14 @@ export default function AsideFilter({ categoriesData, queryConfig }: Props) {
       }).toString()
     })
   })
+
+  const handleRemoveAll = () => {
+    reset()
+    navigate({
+      pathname: path.home,
+      search: createSearchParams(omit(queryConfig, ['price_min', 'price_max', 'rating_filter', 'category'])).toString()
+    })
+  }
 
   return (
     <div className='py-4'>
@@ -145,24 +156,16 @@ export default function AsideFilter({ categoriesData, queryConfig }: Props) {
       <div className='pb-3 pt-1'>
         <div className='text-sm'>Đánh giá</div>
         <div className='my-3'>
-          <ul>
-            <li className='flex py-1 pl-2'>
-              <Link to={''} className='flex items-center text-sm'>
-                {Array(5)
-                  .fill(0)
-                  .map((_, index) => (
-                    <StarIcon key={index} />
-                  ))}
-              </Link>
-              <span>trở lên</span>
-            </li>
-          </ul>
+          <RatingStar queryConfig={queryConfig} />
         </div>
       </div>
 
       <div className='my-4 h-[1px] bg-gray-300'></div>
       <div className='pb-3 pt-1'>
-        <Button className='flex w-full items-center justify-center bg-orange p-2 pt-1 text-sm uppercase text-white hover:bg-orange/80'>
+        <Button
+          onClick={handleRemoveAll}
+          className='flex w-full items-center justify-center bg-orange p-2 pt-1 text-sm uppercase text-white hover:bg-orange/80'
+        >
           Xóa tất cả
         </Button>
       </div>
