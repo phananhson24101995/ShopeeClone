@@ -1,5 +1,6 @@
 import { useQuery } from '@tanstack/react-query'
 import DOMPurify from 'dompurify'
+import { useEffect, useMemo, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import productApi from 'src/apis/product.api'
 import { InputNumber } from 'src/components/InputNumber'
@@ -8,40 +9,78 @@ import { CartIcon, ChevronLeft, ChevronRight } from 'src/icons'
 import { formatCurrency, formatNumberToSocialStyle, rateSale } from 'src/utils/utils'
 
 export default function ProductDetail() {
+  const [activeImage, setActiveImage] = useState('')
+  const [currentIndexImage, setCurrenIndexImage] = useState([0, 5])
   const { id } = useParams()
   const { data: productDetailData } = useQuery({
     queryKey: ['product', id],
     queryFn: () => productApi.getProductDetail(id as string)
   })
   const product = productDetailData?.data.data
+  const currentImages = useMemo(
+    () => (product ? product.images.slice(...currentIndexImage) : []),
+    [currentIndexImage, product]
+  )
+  useEffect(() => {
+    if (product && product.images.length > 0) {
+      setActiveImage(product.images[0])
+    }
+  }, [product])
+
   if (!product) return null
   console.log('product', product)
 
+  const handleActiveImage = (img: string) => {
+    setActiveImage(img)
+  }
+
+  const handlePrev = () => {
+    if (currentIndexImage[0] > 0) {
+      setCurrenIndexImage((prev) => [prev[0] - 1, prev[1] - 1])
+    }
+  }
+
+  const handleNext = () => {
+    if (currentIndexImage[1] < product.images.length) {
+      setCurrenIndexImage((prev) => [prev[0] + 1, prev[1] + 1])
+    }
+  }
+
   return (
     <div className='bg-gray-200 py-6'>
-      <div className='bg-white p-4 shadow'>
-        <div className='container'>
+      <div className='container'>
+        <div className='bg-white p-4 shadow'>
           <div className='grid grid-cols-12 gap-9'>
             <div className='col-span-5'>
               {/* pt-[100%] làm cho width = height */}
               <div className='relative w-full pt-[100%] shadow'>
                 <img
                   className='absolute left-0 top-0 h-full w-full bg-white object-cover'
-                  src={product.image}
+                  src={activeImage}
                   alt={product.name}
                 />
               </div>
               <div className='relative mt-4 grid grid-cols-5 gap-1'>
-                <button className='absolute left-0 top-1/2 z-10 h-9 w-5 -translate-y-1/2 bg-black/20 text-white'>
+                <button
+                  onClick={handlePrev}
+                  className='absolute left-0 top-1/2 z-20 h-9 w-5 -translate-y-1/2 bg-black/20 text-white'
+                >
                   <ChevronLeft className='h-5 w-5' />
                 </button>
-                <button className='absolute right-0 top-1/2 z-10 h-9 w-5 -translate-y-1/2 bg-black/20 text-white'>
+                <button
+                  onClick={handleNext}
+                  className='absolute right-0 top-1/2 z-20 h-9 w-5 -translate-y-1/2 bg-black/20 text-white'
+                >
                   <ChevronRight className='h-5 w-5' />
                 </button>
-                {product.images.slice(0, 5).map((img, index) => {
-                  const isActive = index === 0
+                {currentImages.map((img) => {
+                  const isActive = img === activeImage
                   return (
-                    <div className='relative col-span-1 h-full w-full pt-[100%]' key={img}>
+                    <div
+                      onMouseEnter={() => handleActiveImage(img)}
+                      className='relative col-span-1 h-full w-full pt-[100%]'
+                      key={img}
+                    >
                       {isActive && <div className='absolute inset-0 z-10 border-2 border-orange'></div>}
                       <img
                         className='absolute left-0 top-0 h-full w-full cursor-pointer bg-white object-cover'
@@ -135,8 +174,8 @@ export default function ProductDetail() {
         </div>
       </div>
 
-      <div className='mt-8 bg-white p-4 shadow'>
-        <div className='container'>
+      <div className='container'>
+        <div className='mt-8 bg-white p-4 shadow'>
           <div className='rounded bg-gray-50 p-4 text-lg uppercase text-slate-700'>Mô tả sản phẩm</div>
           <div className='mx-4 mb-4 mt-8 text-sm leading-loose'>
             {/* DOMPurify.sanitize: Chống bị tấn công XSS */}
