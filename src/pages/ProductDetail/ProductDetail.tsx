@@ -6,7 +6,9 @@ import productApi from 'src/apis/product.api'
 import { InputNumber } from 'src/components/InputNumber'
 import { ProductRating } from 'src/components/ProductRating'
 import { CartIcon, ChevronLeft, ChevronRight } from 'src/icons'
+import { ProductListConfig } from 'src/types/product.type'
 import { formatCurrency, formatNumberToSocialStyle, getIdFromNameId, rateSale } from 'src/utils/utils'
+import { Product } from '../ProductList/components/Product'
 
 export default function ProductDetail() {
   const [activeImage, setActiveImage] = useState('')
@@ -23,6 +25,17 @@ export default function ProductDetail() {
     () => (product ? product.images.slice(...currentIndexImage) : []),
     [currentIndexImage, product]
   )
+
+  const queryConfig: ProductListConfig = { limit: '20', page: '1', category: product?.category._id }
+  const { data: productData } = useQuery({
+    queryKey: ['products', queryConfig],
+    queryFn: () => productApi.getProducts(queryConfig as ProductListConfig),
+    enabled: Boolean(product), // Kiểm tra nếu có product rồi thì k gọi nữa
+    staleTime: 3 * 60 * 1000
+  })
+
+  console.log('productData Detail', productData)
+
   useEffect(() => {
     if (product && product.images.length > 0) {
       setActiveImage(product.images[0])
@@ -212,15 +225,32 @@ export default function ProductDetail() {
         </div>
       </div>
 
-      <div className='container'>
-        <div className='mt-8 bg-white p-4 shadow'>
-          <div className='rounded bg-gray-50 p-4 text-lg uppercase text-slate-700'>Mô tả sản phẩm</div>
-          <div className='mx-4 mb-4 mt-8 text-sm leading-loose'>
-            {/* DOMPurify.sanitize: Chống bị tấn công XSS */}
-            <div dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(product.description) }}></div>
+      <div className='mt-8'>
+        <div className='container'>
+          <div className='mt-8 bg-white p-4 shadow'>
+            <div className='rounded bg-gray-50 p-4 text-lg uppercase text-slate-700'>Mô tả sản phẩm</div>
+            <div className='mx-4 mb-4 mt-8 text-sm leading-loose'>
+              {/* DOMPurify.sanitize: Chống bị tấn công XSS */}
+              <div dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(product.description) }}></div>
+            </div>
           </div>
         </div>
       </div>
+
+      {productData && (
+        <div className='mt-8'>
+          <div className='container'>
+            <div className='uppercase text-gray-400'>Có thể bạn cũng thích</div>
+            <div className='mt-6 grid grid-cols-2 gap-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6'>
+              {productData.data.data.products.map((product) => (
+                <div key={product._id} className='col-span-1'>
+                  <Product product={product} />
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   )
 }
