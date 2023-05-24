@@ -16,7 +16,8 @@ function ProductList() {
     queryFn: () => {
       return productApi.getProducts(queryConfig as ProductListConfig)
     },
-    keepPreviousData: true // Không set data về undefined để tránh load lại UI
+    keepPreviousData: true, // Không set data về undefined để tránh load lại UI
+    staleTime: 3 * 60 * 1000
   })
 
   // Get Categories
