@@ -3,7 +3,6 @@ import { Button } from 'src/components/Button'
 import path from 'src/constants/path'
 import { CategoryIcon, DropDownArrowRightIcon, FilterIcon, StarIcon } from 'src/icons'
 import { Category } from 'src/types/category.type'
-import { QueryConfig } from '../../ProductList'
 import classNames from 'classnames'
 import { InputNumber } from 'src/components/InputNumber'
 import { useForm, Controller } from 'react-hook-form'
@@ -12,6 +11,7 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import { NoUndefinedField } from 'src/types/util.type'
 import { RatingStar } from '../RatingStar'
 import { omit } from 'lodash'
+import { QueryConfig } from 'src/hooks/useQueryConfig'
 
 interface Props {
   categoriesData: Category[]

@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom'
+import { Link, createSearchParams, useNavigate } from 'react-router-dom'
 import { Propover } from '../Propover'
 import { useContext } from 'react'
 import { AppContext } from 'src/contexts/app.context'
@@ -6,9 +6,28 @@ import { useMutation } from '@tanstack/react-query'
 import authApi from 'src/apis/auth.api'
 import { BellIcon, CartIcon, HelpIcon, LanguageIcon, LogoShopee, SearchIcon, ChevronDownIcon } from 'src/icons'
 import path from 'src/constants/path'
+import useQueryConfig from 'src/hooks/useQueryConfig'
+import { useForm } from 'react-hook-form'
+import { Schema, schema } from 'src/utils/rules'
+import { yupResolver } from '@hookform/resolvers/yup'
+import { omit } from 'lodash'
+
+type FormData = Pick<Schema, 'name'>
+const nameSchema = schema.pick(['name'])
 
 function Header() {
+  const navigate = useNavigate()
+  const queryConfig = useQueryConfig()
+  console.log('queryConfig', queryConfig)
+
   const { setIsAuthenticated, isAuthenticated, setProfile, profile } = useContext(AppContext)
+
+  const { register, handleSubmit } = useForm({
+    defaultValues: {
+      name: ''
+    },
+    resolver: yupResolver(nameSchema)
+  })
 
   const logoutMutation = useMutation({
     mutationFn: authApi.logoutUser,
@@ -21,6 +40,19 @@ function Header() {
   const handleLogout = () => {
     logoutMutation.mutate()
   }
+
+  const handleSubmitForm = handleSubmit((data) => {
+    const config = queryConfig.order
+      ? omit({ ...queryConfig, name: data.name }, ['order', 'sort_by'])
+      : {
+          ...queryConfig,
+          name: data.name
+        }
+    navigate({
+      pathname: path.home,
+      search: createSearchParams(config).toString()
+    })
+  })
 
   return (
     <div className=' bg-[linear-gradient(-180deg,#f53d2d,#f63)] pb-5 pt-2 text-white'>
@@ -120,12 +152,12 @@ function Header() {
             <LogoShopee />
           </Link>
 
-          <form className='col-span-9'>
+          <form className='col-span-9' onSubmit={handleSubmitForm}>
             <div className='flex rounded-sm bg-white p-1'>
               <input
+                {...register('name')}
                 placeholder='SALE SỐC DƯỚI 250.000Đ'
                 type='text'
-                name='search'
                 className='flex-grow border-none bg-transparent px-3 py-2 text-black outline-none'
               />
 

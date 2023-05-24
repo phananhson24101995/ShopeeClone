@@ -92,9 +92,9 @@ export const schema = yup
       name: 'price-not-allowed',
       message: 'Giá trị không phù hợp',
       test: testPriceMinMax
-    })
+    }),
+    name: yup.string().trim().required('Tên sản phẩm là bắt buộc')
   })
-  .required()
 
 export type FormRegisterType = yup.InferType<typeof schema>
 
