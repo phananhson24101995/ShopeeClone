@@ -2,7 +2,7 @@ import { Link, createSearchParams, useNavigate } from 'react-router-dom'
 import { Propover } from '../Propover'
 import { useContext } from 'react'
 import { AppContext } from 'src/contexts/app.context'
-import { useMutation } from '@tanstack/react-query'
+import { useMutation, useQuery } from '@tanstack/react-query'
 import authApi from 'src/apis/auth.api'
 import { BellIcon, CartIcon, HelpIcon, LanguageIcon, LogoShopee, SearchIcon, ChevronDownIcon } from 'src/icons'
 import path from 'src/constants/path'
@@ -11,9 +11,14 @@ import { useForm } from 'react-hook-form'
 import { Schema, schema } from 'src/utils/rules'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { omit } from 'lodash'
+import purchaseApi from 'src/apis/purchase.api'
+import { purchasesStatus } from 'src/constants/purchase'
+import noproduct from 'src/assets/images/no-product.png'
+import { formatCurrency, formatNumberToSocialStyle } from 'src/utils/utils'
 
 type FormData = Pick<Schema, 'name'>
 const nameSchema = schema.pick(['name'])
+const MAX_PURCHASES = 5
 
 function Header() {
   const navigate = useNavigate()
@@ -36,6 +41,23 @@ function Header() {
       setProfile(null)
     }
   })
+
+  /**
+   * Khi chúng ta chuyển trang thì Header chỉ bị re-render
+   * Chứ không bị unmount - mounting again
+   * (Tất nhiên là trừ trường hợp logout rồi nhảy sang RegisterLayout rồi nhảy vào lại)
+   * Nên cách query này không bị inactive => Không bị gọi lại => Không cần thiết phải set satel: Infini
+   */
+  const { data: purchasesInCartData } = useQuery({
+    queryKey: ['purchases', { status: purchasesStatus.inCart }],
+    queryFn: () =>
+      purchaseApi.getPurchases({
+        status: purchasesStatus.inCart
+      })
+  })
+  console.log('purchasesInCartData', purchasesInCartData)
+
+  const purchaseInCart = purchasesInCartData?.data.data
 
   const handleLogout = () => {
     logoutMutation.mutate()
@@ -171,41 +193,58 @@ function Header() {
               placement='bottom-end'
               renderPropover={
                 <div className='rounded-sm bg-white shadow-sm'>
-                  <div className='relative max-w-[400px] rounded-sm border border-gray-200 bg-white text-sm shadow-md'>
-                    <div className='p-2'>
-                      <div className='capitalize text-gray-400'>Sản phẩm mới thêm</div>
-                      <div className='mt-5'>
-                        <div className='mt-2 flex py-2 hover:bg-gray-100'>
-                          <div className='flex-shrink-0'>
-                            <img
-                              src='https://down-vn.img.susercontent.com/file/sg-11134201-22100-xht2eg8eqhivf7_tn'
-                              alt='img'
-                              className='h-11 w-11 object-cover
-                              '
-                            />
+                  {!purchaseInCart && (
+                    <div className='flex flex-col items-center justify-center pb-[60px] pt-[60px] text-center'>
+                      <img src={noproduct} alt='No product' className='h-[100px] w-[100px]' />
+                      <span className='mt-5'>Không có sản phẩm</span>
+                    </div>
+                  )}
+
+                  {purchaseInCart && (
+                    <div className='relative max-w-[400px] rounded-sm border border-gray-200 bg-white text-sm shadow-md'>
+                      <div className='p-2'>
+                        <div className='capitalize text-gray-400'>Sản phẩm mới thêm</div>
+                        <div className='mt-5'>
+                          {purchaseInCart.slice(0, MAX_PURCHASES).map((item) => (
+                            <div key={item.product._id} className='mt-2 flex py-2 hover:bg-gray-100'>
+                              <div className='flex-shrink-0'>
+                                <img
+                                  src={item.product.image}
+                                  alt={item.product.name}
+                                  className='h-11 w-11 border-[1px] border-solid border-gray-200 object-cover
+                            '
+                                />
+                              </div>
+                              <div className='ml-2 flex-grow overflow-hidden'>
+                                <div className='truncate'>{item.product.name}</div>
+                              </div>
+                              <div className='ml-2 flex-shrink-0'>
+                                <span className='text-orange'>đ{formatCurrency(item.product.price)}</span>
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+
+                        <div className='mt-6 flex items-center justify-between'>
+                          <div className='text-xs capitalize text-gray-500'>
+                            {purchaseInCart.length > MAX_PURCHASES && purchaseInCart.length - MAX_PURCHASES}Thêm vào giỏ
+                            hàng
                           </div>
-                          <div className='ml-2 flex-grow overflow-hidden'>
-                            <div className='truncate'>Giường xếp văn phòng ngủ trưa</div>
-                          </div>
-                          <div className='ml-2 flex-shrink-0'>
-                            <span className='text-orange'>đ200000</span>
-                          </div>
+                          <button className='rounded-sm bg-orange px-4 py-2 capitalize text-white hover:text-white/70'>
+                            Xem giỏ hàng
+                          </button>
                         </div>
                       </div>
-
-                      <div className='mt-6 flex items-center justify-between'>
-                        <div className='text-xs capitalize text-gray-500'>Thêm vào giỏ hàng</div>
-                        <button className='rounded-sm bg-orange px-4 py-2 capitalize text-white hover:text-white/70'>
-                          Xem giỏ hàng
-                        </button>
-                      </div>
                     </div>
-                  </div>
+                  )}
                 </div>
               }
             >
               <Link to='/' className='relative'>
                 <CartIcon />
+                <span className='absolute bottom-[60%] left-[65%] rounded-full bg-white px-[9px] py-[1px] text-xs text-orange'>
+                  {purchaseInCart?.length}
+                </span>
               </Link>
             </Propover>
           </div>
