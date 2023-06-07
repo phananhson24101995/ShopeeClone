@@ -7,7 +7,7 @@ import './index.css'
 import App from './App'
 import { AppProvider } from './contexts/app.context'
 
-const queryClient = new QueryClient({
+export const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
       refetchOnWindowFocus: false // Chuyển qua lại giữa các tab không bị fetch lại dữ liệu
