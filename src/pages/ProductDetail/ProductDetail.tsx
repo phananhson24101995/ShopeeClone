@@ -203,11 +203,11 @@ export default function ProductDetail() {
               <div className='mt-8 flex items-center'>
                 <div className='capitalize text-gray-500'>Số lượng</div>
                 <QuantityController
-                  onIncrease={handleBuyCount}
-                  onDecrease={handleBuyCount}
-                  onType={handleBuyCount}
-                  value={buyCount}
-                  max={product.quantity}
+                // onIncrease={handleBuyCount}
+                // onDecrease={handleBuyCount}
+                // onType={handleBuyCount}
+                // value={buyCount}
+                // max={product.quantity}
                 />
                 <div className='ml-6 text-sm text-gray-500'>{product.quantity} sản phẩm có sẵn</div>
               </div>
